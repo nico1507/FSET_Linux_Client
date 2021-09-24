@@ -14,7 +14,7 @@ scriptversion=0.0.1
 #function definitions
 install_ad_software() {
     printf "Installing required software for joining AD...\n" | tee -a /etc/fset/join.log
-    zypper -n install krb5-client samba-client openldap2-client sssd sssd-tools sssd-ad pam_mount >> /etc/fset/join.log
+    zypper -n install krb5-client samba-client openldap2-client sssd sssd-tools sssd-ad pam_krb5 pam_mount >> /etc/fset/join.log
     printf "\nDone.\n" | tee -a /etc/fset/join.log
 }
 
@@ -45,7 +45,7 @@ configure_domain() {
     chmod 644 $targetdir
     
     targetdir=/etc/sssd/sssd.conf
-    command cp ./ressources/config_files/sssd.conf $tagetdir
+    command cp ./ressources/config_files/sssd.conf $targetdir
     chown root $targetdir
     chgrp root $targetdir
     chmod 600 $targetdir
@@ -55,7 +55,7 @@ configure_domain() {
     chown root $targetdir
     chgrp root $targetdir
     chmod 644 $targetdir
-    print "Done.\n" |  tee -a /etc/fset/join.log
+    printf "Done.\n" |  tee -a /etc/fset/join.log
 }
 
 join_domain() {
@@ -83,8 +83,10 @@ join_domain() {
 
 configure_pam(){
     printf "Configuring PAM... " | tee -a /etc/fset/join.log
+    pam-config -a --krb5-ignore_unknown_principals
     pam-config -a --sss
     pam-config -a --mkhomedir
+    pam-config -a --localuser
     systemctl enable sssd > /dev/null
     systemctl start sssd
     printf "Done." | tee -a /etc/fset/join.log
@@ -111,7 +113,7 @@ cd "$(dirname "$(readlink "$0")")"
 
 echo -e "### Basic configuration stuff: ###\n"
 read -p "Enter Domain Admin Username: " domainuser
-read -p "Enter Password: " domainpassword
+read -s -p "Enter Password: " domainpassword
 
 # initialize logfile
 echo -e "##### FSET Domain join #####\n" > /etc/fset/join.log
