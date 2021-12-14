@@ -92,6 +92,36 @@ configure_pam(){
     printf "Done." | tee -a /etc/fset/join.log
 }
 
+configure_pam_mount(){
+    printf "Configuring PAM Mount... " | tee -a /etc/fset/join.log
+    targetdir=/etc/security/pam_mount.conf.xml
+    command cp ./ressources/config_files/pam_mount.conf.xml $targetdir
+    chown root $targetdir
+    chgrp root $targetdir
+    chmod 644 $targetdir
+    
+    targetdir=/etc/profile.d/profile_sync.sh
+    command cp ./ressources/config_files/profile_sync.sh $targetdir
+    chown root $targetdir
+    chgrp root $targetdir
+    chmod 644 $targetdir
+}
+
+set_default_wallpaper(){
+    printf "Set default wallpaper... "
+    targetdir=/etc/FSET/wallpaper.png
+    command cp ./ressources/wallpapers/wallpaper.png $targetdir
+    chown root $targetdir
+    chgrp root $targetdir
+    chmod 644 $targetdir
+
+    targetdir=/etc/profile.d/set_default_wallpaper.sh
+    command cp ./ressources/config_files/set_default_wallpaper.sh $targetdir
+    chown root $targetdir
+    chgrp root $targetdir
+    chmod 644 $targetdir
+}
+
 clear
 echo -e "##### FSET domain join #####\n\n"
 
@@ -131,6 +161,10 @@ join_domain
 
 #configure pam
 configure_pam
+configure_pam_mount
+
+#set FSET branding
+set_default_wallpaper
 
 # clear variables
 unset domainuser
