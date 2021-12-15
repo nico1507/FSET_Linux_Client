@@ -7,5 +7,5 @@ if [ -d /tmp/$USER/profile/ ]
     else
         mkdir -p /tmp/$USER/profile/$USER.linux
     fi
-    (while :; do rsync ~/ --delete -xurl /tmp/$USER/profile/$USER.linux/; sleep 10m; done) & 
+    (while :; do rsync ~/ --delete -xurl /tmp/$USER/profile/$USER.linux/; sleep 5m; done) & 
 fi
