@@ -76,6 +76,9 @@ install_user_software
 # write current version
 write_version
 
+# ask for reboot
+reboot_client
+
 # clear variables
 unset domainuser
 unset domainpassword

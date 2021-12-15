@@ -239,6 +239,8 @@ install_printers(){
 }
 
 reboot_client(){
+    if [ $ad_version_cur != 1000 ]
+    then
     if [ $ad_config_version_cur -lt $ad_config_version -o $ad_version_cur -lt $ad_version -o $security_config_version_cur -lt $security_config_version ]
     then
         read -p "The script has finished. It is recommended to reboot the system before futher use. Do you want to reboot now? (y/n) " reboot_toggle
@@ -246,5 +248,6 @@ reboot_client(){
         then
             reboot
         fi
+    fi
     fi
 }
