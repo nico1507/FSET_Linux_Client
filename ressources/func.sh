@@ -9,6 +9,11 @@ print_version(){
     exit 0
 }
 
+print_logo(){
+    cat ./ressources/fset_logo.txt
+    printf "\n\n"
+}
+
 force_execution(){
     ad_version_cur=-2
     ad_config_version_cur=-2
@@ -225,9 +230,21 @@ install_printers(){
         tar -xvf ./ressources/config_files/cups.tar -C /etc/ &> /dev/null
         chown root -R /etc/cups
         chgrp root -R /etc/cups
+        systemctl restart cups
         printf "Done.\n" | tee -a /etc/fset/join.log
     else
         printf "Already up to date.\n" | tee -a /etc/fset/join.log
     fi
     
+}
+
+reboot_client(){
+    if [ $ad_config_version_cur -lt $ad_config_version -o $ad_version_cur -lt $ad_version -o $security_config_version_cur -lt $security_config_version ]
+    then
+        read -p "The script has finished. It is recommended to reboot the system before futher use. Do you want to reboot now? (y/n) " reboot_toggle
+        if [ $reboot_toggle = "y" -o $reboot_toggle = "Y" ]
+        then
+            reboot
+        fi
+    fi
 }

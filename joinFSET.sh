@@ -18,6 +18,7 @@ software_version=0
 source ./ressources/func.sh
 
 clear
+print_logo
 echo -e "##### FSET domain join #####\n\n"
 
 # Basic checks at beginning
