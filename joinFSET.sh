@@ -89,7 +89,8 @@ configure_pam(){
     pam-config -a --localuser
     systemctl enable sssd > /dev/null
     systemctl start sssd
-    printf "Done." | tee -a /etc/fset/join.log
+    sed -i 's/ruth//g' /etc/sysconfig/displaymanager
+    printf "Done.\n" | tee -a /etc/fset/join.log
 }
 
 configure_pam_mount(){
@@ -105,11 +106,16 @@ configure_pam_mount(){
     chown root $targetdir
     chgrp root $targetdir
     chmod 644 $targetdir
+        
+    pam-config --service sddm -a --mount > /dev/null
+    pam-config --service kde -a --mount > /dev/null
+    pam-config --service login -a --mount > /dev/null
+    printf "Done.\n" | tee -a /etc/fset/join.log
 }
 
 set_default_wallpaper(){
-    printf "Set default wallpaper... "
-    targetdir=/etc/FSET/wallpaper.png
+    printf "Set default wallpaper... " | tee -a /etc/fset/join.log
+    targetdir=/etc/fset/wallpaper.png
     command cp ./ressources/wallpapers/wallpaper.png $targetdir
     chown root $targetdir
     chgrp root $targetdir
@@ -120,6 +126,7 @@ set_default_wallpaper(){
     chown root $targetdir
     chgrp root $targetdir
     chmod 644 $targetdir
+    printf "Done.\n" | tee -a /etc/fset/join.log
 }
 
 clear
@@ -151,19 +158,19 @@ echo -e "$(date), script version $scriptversion\n" >> /etc/fset/join.log
 echo -e "\n"
 
 # install required software
-install_ad_software
+#install_ad_software
 
 # configure domain config files
-configure_domain
+#configure_domain
 
 # join domain
-join_domain
+#join_domain
 
-#configure pam
-configure_pam
+# configure pam
+#configure_pam
 configure_pam_mount
 
-#set FSET branding
+# set FSET branding
 set_default_wallpaper
 
 # clear variables

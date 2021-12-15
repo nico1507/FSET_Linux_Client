@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+(sleep 10s
 qdbus-qt5 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
     var allDesktops = desktops();
     print (allDesktops);
@@ -8,6 +9,6 @@ qdbus-qt5 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
         d.currentConfigGroup = Array('Wallpaper',
                                     'org.kde.image',
                                     'General');
-        d.writeConfig('Image', 'file:///etc/FSET/wallpaper.png')
+        d.writeConfig('Image', 'file:///etc/fset/wallpaper.png')
     }"
-kwriteconfig5 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file:///etc/FSET/wallpaper.png"
+kwriteconfig5 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file:///etc/fset/wallpaper.png") &

@@ -1,10 +1,11 @@
 #!/bin/bash
 if [ -d /tmp/$USER/profile/ ]
+    then
     if [ -d /tmp/$USER/profile/$USER.linux ]
     then
-        rsync -xurl /tmp/$USER/profile/$USER.linux ~/
+        rsync -xurl /tmp/$USER/profile/$USER.linux/ ~/
     else
-        mkdir -p /tmp/$USER/profile/$SUER.linux
+        mkdir -p /tmp/$USER/profile/$USER.linux
     fi
-    (while : ; do; rsync -xurl /tmp/$USER/profile/$USER.linux ~/) &
+    (while :; do rsync ~/ -xurl /tmp/$USER/profile/$USER.linux/; sleep 10m; done) & 
 fi

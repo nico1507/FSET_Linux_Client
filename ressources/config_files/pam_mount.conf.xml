@@ -40,9 +40,11 @@
 
 <mkmountpoint enable="1" remove="true" />
 
-<volume fstype="cifs" options="vers=3.1.1,file_mode=0600,dir_mode=0700,mfsymlinks,uid=%(USER),gid=100" server="fset-dea.fset.stuve.uni-ulm.de" path="profiles" mountpoint="/tmp/%(USER)/profile" sec="krb5i" cruid="%(USERUID)"><not><uid>1-5000</uid></not></volume>
-<volume fstype="cifs" options="vers=3.0" server="fset-dea.fset.stuve.uni-ulm.de" path="fsdok" mountpoint="/home/fset.stuve.uni-ulm.de/%(USER)/FSDok" sec="krb5i" cruid="%(USERUID)"><not><uid>0-5000</uid></not></volume>
-<volume fstype="cifs" options="vers=3.0" server="fset-dea.fset.stuve.uni-ulm.de" path="scratch" mountpoint="/home/fset.stuve.uni-ulm.de/%(USER)/Scratch" sec="krb5i" cruid="%(USERUID)"><not><uid>0-5000</uid></not></volume>
-<volume fstype="cifs" options="vers=3.0" server="fset-dea.fset.stuve.uni-ulm.de" path="media" mountpoint="/home/fset.stuve.uni-ulm.de/%(USER)/Media" sec="krb5i" cruid="%(USERUID)"><not><uid>0-5000</uid></not></volume>
+<volume fstype="cifs" options="vers=3.1.1,file_mode=0600,dir_mode=0700,mfsymlinks,uid=%(USER),gid=100" server="fset-dea.stuve.uni-ulm.de" path="profiles" mountpoint="/tmp/%(USER)/profile" sec="krb5i" cruid="%(USERUID)"><not><uid>1-5000</uid></not></volume>
+<volume fstype="cifs" options="vers=3.0" server="fset-dea.stuve.uni-ulm.de" path="home/%(USER)/Dokumente" mountpoint="/home/fset.stuve.uni-ulm.de/%(USER)/Dokumente" sec="krb5i" cruid="%(USERUID)"><not><uid>0-5000</uid></not></volume>
+<volume fstype="cifs" options="vers=3.0" server="fset-dea.stuve.uni-ulm.de" path="home/%(USER)/Downloads" mountpoint="/home/fset.stuve.uni-ulm.de/%(USER)/Downloads" sec="krb5i" cruid="%(USERUID)"><not><uid>0-5000</uid></not></volume>
+<volume fstype="cifs" options="vers=3.0" server="fset-dea.stuve.uni-ulm.de" path="fsdok" mountpoint="/home/fset.stuve.uni-ulm.de/%(USER)/FSDok" sec="krb5i" cruid="%(USERUID)"><not><uid>0-5000</uid></not></volume>
+<volume fstype="cifs" options="vers=3.0" server="fset-dea.stuve.uni-ulm.de" path="scratch" mountpoint="/home/fset.stuve.uni-ulm.de/%(USER)/Scratch" sec="krb5i" cruid="%(USERUID)"><not><uid>0-5000</uid></not></volume>
+<volume fstype="cifs" options="vers=3.0" server="fset-dea.stuve.uni-ulm.de" path="media" mountpoint="/home/fset.stuve.uni-ulm.de/%(USER)/Media" sec="krb5i" cruid="%(USERUID)"><not><uid>0-5000</uid></not></volume>
 
 </pam_mount>
