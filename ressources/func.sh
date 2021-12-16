@@ -81,7 +81,7 @@ install_user_software() {
     printf "Installing user software... " | tee -a /etc/fset/join.log
     if [ $software_version_cur -lt $software_version ]
     then
-        zypper -n install chromium thunderbird gimp htop >> /etc/fset/join.log
+        zypper -n install chromium thunderbird gimp htop texmaker >> /etc/fset/join.log
         printf "Done.\n" | tee -a /etc/fset/join.log
     else
         printf "Already up to date.\n" | tee -a /etc/fset/join.log
