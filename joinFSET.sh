@@ -74,6 +74,8 @@ install_printers
 configure_firewall
 activate_ssh
 configure_aliases
+configure_logout
+clean_local_profiles
 
 # install userspace software
 install_user_software
