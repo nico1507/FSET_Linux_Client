@@ -70,6 +70,11 @@ set_default_wallpaper
 # install printers
 install_printers
 
+# configure system
+configure_firewall
+activate_ssh
+configure_aliases
+
 # install userspace software
 install_user_software
 

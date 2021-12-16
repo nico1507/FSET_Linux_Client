@@ -70,9 +70,8 @@ install_ad_software() {
     printf "Installing required software for joining AD... " | tee -a /etc/fset/join.log
     if [ $ad_version_cur -lt $ad_version ] 
     then
-        printf "\n"
         zypper -n install krb5-client samba-client openldap2-client sssd sssd-tools sssd-ad pam_krb5 pam_mount >> /etc/fset/join.log
-        printf "\nDone.\n" | tee -a /etc/fset/join.log
+        printf "Done.\n" | tee -a /etc/fset/join.log
     else
         printf "Already up to date.\n" | tee -a /etc/fset/join.log
     fi
@@ -82,7 +81,7 @@ install_user_software() {
     printf "Installing user software... " | tee -a /etc/fset/join.log
     if [ $software_version_cur -lt $software_version ]
     then
-        zypper -n install chromium thunderbird gimp >> /etc/fset/join.log
+        zypper -n install chromium thunderbird gimp htop >> /etc/fset/join.log
         printf "Done.\n" | tee -a /etc/fset/join.log
     else
         printf "Already up to date.\n" | tee -a /etc/fset/join.log
@@ -134,7 +133,7 @@ join_domain() {
     printf "Joining domain... " |  tee -a /etc/fset/join.log
     if [ $ad_version_cur -lt $ad_version ] 
     then
-        echo $domainpassword | kinit $domainuser > /dev/null
+        echo $domainpassword | kinit $domainuser &>/dev/null
         
         if ! [ $? -eq 0 ]
         then
@@ -143,7 +142,7 @@ join_domain() {
         fi
         
         printf "\n" >>/etc/fset/join.logfile
-        net ads join -k >> /etc/fset/join.logfile
+        net ads join -k &>> /etc/fset/join.logfile
         printf "\n" >>/etc/fset/join.logfile
         
         if ! [ $? -eq 0 ]
@@ -165,7 +164,7 @@ configure_pam(){
         pam-config -a --sss &>/dev/null
         pam-config -a --mkhomedir &>/dev/null
         pam-config -a --localuser &>/dev/null
-        systemctl enable sssd >/dev/null
+        systemctl enable sssd &>/dev/null
         systemctl start sssd
         sed -i 's/^DISPLAYMANAGER_AUTOLOGIN.*$/DISPLAYMANAGER_AUTOLOGIN=""/' /etc/sysconfig/displaymanager
         sed -i 's/^DISPLAYMANAGER_AD_INTEGRATION.*$/DISPLAYMANAGER_AD_INTEGRATION=""/' /etc/sysconfig/displaymanager
@@ -194,6 +193,7 @@ configure_pam_mount(){
         pam-config --service sddm -a --mount &>/dev/null
         pam-config --service kde -a --mount &>/dev/null
         pam-config --service login -a --mount &>/dev/null
+        pam-config --service sshd -a --mount &>/dev/null
         printf "Done.\n" | tee -a /etc/fset/join.log
     else
         printf "Already done.\n" | tee -a /etc/fset/join.log
@@ -249,5 +249,68 @@ reboot_client(){
             reboot
         fi
     fi
+    fi
+}
+
+configure_firewall(){
+    printf "Configure firewall... " | tee -a /etc/fset/join.log
+    if [ $security_config_version_cur -lt $security_config_version ]
+    then
+        firewall-cmd --new-zone=uninetz --permanent &>/dev/null
+        firewall-cmd --reload &>/dev/null
+        firewall-cmd --zone=uninetz --add-source=134.60.0.0/16 --permanent &>/dev/null
+        firewall-cmd --reload &>/dev/null
+        firewall-cmd --zone=uninetz --add-service=ssh --permanent &>/dev/null
+        firewall-cmd --reload &>/dev/null
+        printf "Done.\n" | tee -a /etc/fset/join.log
+    else
+        printf "Already up to date.\n" | tee -a /etc/fset/join.log
+    fi
+}
+
+activate_ssh(){
+    if [ $security_config_version_cur -lt $security_config_version ]
+    then
+        printf "Enable ssh... " | tee -a /etc/fset/join.log
+        systemctl enable sshd &>/dev/null
+        systemctl start sshd &>/dev/null
+        printf "Done.\n" | tee -a /etc/fset/join.log
+    fi
+}
+
+configure_aliases(){
+    if [ $security_config_version_cur -lt $security_config_version ]
+    then
+        printf "Configure aliases... " | tee -a /etc/fset/join.log
+        echo $'alias force_logout=\'killall --user $USER\'' >> /etc/profile.d/alias.bash
+        printf "Done.\n" | tee -a /etc/fset/join.log
+    fi
+}
+
+configure_logout(){
+    if [ $ad_config_version_cur -lt $ad_config_version ]
+    then
+        printf "Configure auto logout... " | tee -a /etc/fset/join.log
+        sed -i 's/^DAILY_TIME.*$/DAILY_TIME="4:00"/' /etc/sysconfig/cron
+        systemctl reload cron
+        targetdir=/etc/cron.daily/
+        command cp ./ressources/config_files/logout_all_users.sh $targetdir
+        chown root $targetdir
+        chgrp root $targetdir
+        chmod 755 $targetdir
+        printf "Done.\n" | tee -a /etc/fset/join.log
+    fi
+}
+
+clean_local_profiles(){
+    if [ $ad_config_version_cur -lt $ad_config_version ]
+    then
+        printf "Configure deletion of local profiles... " | tee -a /etc/fset/join.log
+        targetdir=/etc/cron.weekly/
+        command cp ./ressources/config_files/delete_old_profiles.sh $targetdir
+        chown root $targetdir
+        chgrp root $targetdir
+        chmod 755 $targetdir
+        printf "Done.\n" | tee -a /etc/fset/join.log
     fi
 }
