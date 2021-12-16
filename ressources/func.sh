@@ -231,6 +231,8 @@ install_printers(){
         chown root -R /etc/cups
         chgrp root -R /etc/cups
         chmod -R ugo+r /etc/cups/ppd
+        chmod ugo+r /etc/cups/printers.conf
+        chmod ugo+r /etc/cups/printers.conf.0
         systemctl restart cups
         printf "Done.\n" | tee -a /etc/fset/join.log
     else
