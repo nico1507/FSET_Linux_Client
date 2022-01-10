@@ -294,7 +294,7 @@ configure_logout(){
         printf "Configure auto logout... " | tee -a /etc/fset/join.log
         sed -i 's/^DAILY_TIME.*$/DAILY_TIME="4:00"/' /etc/sysconfig/cron
         systemctl reload cron
-        targetdir=/etc/cron.daily/
+        targetdir=/etc/cron.daily/logout_all_users.sh
         command cp ./ressources/config_files/logout_all_users.sh $targetdir
         chown root $targetdir
         chgrp root $targetdir
@@ -307,7 +307,7 @@ clean_local_profiles(){
     if [ $ad_config_version_cur -lt $ad_config_version ]
     then
         printf "Configure deletion of local profiles... " | tee -a /etc/fset/join.log
-        targetdir=/etc/cron.weekly/
+        targetdir=/etc/cron.weekly/delete_old_profiles.sh
         command cp ./ressources/config_files/delete_old_profiles.sh $targetdir
         chown root $targetdir
         chgrp root $targetdir
