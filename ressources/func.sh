@@ -288,6 +288,19 @@ configure_aliases(){
     fi
 }
 
+configure_sddm(){
+    if [ $security_config_version_cur -lt $security_config_version ]
+    then
+        printf "Configure sddm... " | tee -a /etc/fset/join.log
+        targetdir=/etc/sddm.conf.d/noshutdown.conf
+        command cp ./ressources/config_files/noshutdown.conf $targetdir
+        chown root $targetdir
+        chgrp root $targetdir
+        chmod 644 $targetdir
+        printf "Done.\n" | tee -a /etc/fset/join.log
+    fi
+}
+
 configure_logout(){
     if [ $ad_config_version_cur -lt $ad_config_version ]
     then
