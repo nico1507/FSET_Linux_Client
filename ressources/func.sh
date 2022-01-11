@@ -82,6 +82,14 @@ install_user_software() {
     if [ $software_version_cur -lt $software_version ]
     then
         zypper -n install chromium thunderbird gimp htop texmaker >> /etc/fset/join.log
+        if [ $software_version_cur -lt 1 ]
+        then
+            zypper addrepo --refresh https://download.opensuse.org/repositories/system:/snappy/openSUSE_Leap_15.3 snappy >> /dev/null
+            zypper --gpg-auto-import-keys refresh >> /dev/null
+            zypper dup --from snappy
+            zypper -n install snapd
+            systemctl enable --now snapd
+        fi
         printf "Done.\n" | tee -a /etc/fset/join.log
     else
         printf "Already up to date.\n" | tee -a /etc/fset/join.log
