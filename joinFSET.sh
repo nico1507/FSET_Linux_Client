@@ -11,7 +11,7 @@
 # static variables
 ad_version=0
 ad_config_version=0
-security_config_version=0
+security_config_version=1
 printer_config_version=0
 software_version=0
 
@@ -76,6 +76,7 @@ activate_ssh
 configure_aliases
 configure_logout
 clean_local_profiles
+configure_sddm
 
 # install userspace software
 install_user_software

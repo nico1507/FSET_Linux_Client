@@ -297,6 +297,7 @@ configure_sddm(){
         chown root $targetdir
         chgrp root $targetdir
         chmod 644 $targetdir
+        systemctl restart sddm
         printf "Done.\n" | tee -a /etc/fset/join.log
     fi
 }
