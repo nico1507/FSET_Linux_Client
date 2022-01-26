@@ -81,6 +81,9 @@ configure_sddm
 # install userspace software
 install_user_software
 
+#configure autodeploy
+configure_autodeploy
+
 # write current version
 write_version
 

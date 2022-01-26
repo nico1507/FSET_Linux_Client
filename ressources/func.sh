@@ -339,3 +339,16 @@ clean_local_profiles(){
         printf "Done.\n" | tee -a /etc/fset/join.log
     fi
 }
+
+configure_autodeploy(){
+    if [ $software_version_cur -lt 0 ]
+    then 
+        printf "Configure autodeploy... " | tee -a /etc/fset/join.log
+        targetdir=/etc/cron.weekly/autodeploy.sh
+        command cp ./ressources/config_files/autodeploy.sh $targetdir
+        chown root $targetdir
+        chgrp root $targetdir
+        chmod 755 $targetdir
+        printf "Done.\n" | tee -a /etc/fset/join.log
+    fi
+}
